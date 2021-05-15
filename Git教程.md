@@ -1,7 +1,6 @@
 # Git教程
 
 - 克隆版本库
-&nbsp;
 `git clone https://github.com/three-C-team/Check-Chess-Cheer.git`
 &nbsp;
 
@@ -16,7 +15,6 @@
     ```
 
 - 查看版本库状态
-&nbsp;
 `git status`
 &nbsp;
 
@@ -37,7 +35,6 @@
     ```
 
 - 添加要提交修改的文件
-&nbsp;
 `git add README.md`
 &nbsp;
 - 提交修改至本地版本库
@@ -50,11 +47,10 @@
     ```
 
 - 上传修改至远程版本库（GitHub）
-&nbsp;
 `git push`
 &nbsp;
 
-    ```
+    ```none
     枚举对象中: 5, 完成.
     对象计数中: 100% (5/5), 完成.
     使用 8 个线程进行压缩
