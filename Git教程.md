@@ -16,7 +16,10 @@
 
 - 进入目录
 `cd Check-Chess-Cheer`
-
+&nbsp;
+- 修改或添加文件
+`略`
+&nbsp;
 - 查看版本库状态
 `git status`
 &nbsp;
