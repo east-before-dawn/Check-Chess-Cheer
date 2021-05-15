@@ -1,10 +1,11 @@
 # Git教程
 
 - 克隆版本库
+&nbsp;
 `git clone https://github.com/three-C-team/Check-Chess-Cheer.git`
 &nbsp;
 
-    ```
+    ```none
     正克隆到 'Check-Chess-Cheer'...
     remote: Enumerating objects: 22, done.
     remote: Counting objects: 100% (22/22), done.
@@ -15,6 +16,7 @@
     ```
 
 - 查看版本库状态
+&nbsp;
 `git status`
 &nbsp;
 
@@ -35,6 +37,7 @@
     ```
 
 - 添加要提交修改的文件
+&nbsp;
 `git add README.md`
 &nbsp;
 - 提交修改至本地版本库
@@ -47,6 +50,7 @@
     ```
 
 - 上传修改至远程版本库（GitHub）
+&nbsp;
 `git push`
 &nbsp;
 
