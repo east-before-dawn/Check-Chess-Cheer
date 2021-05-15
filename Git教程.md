@@ -66,3 +66,11 @@
     To https://github.com/three-C-team/Check-Chess-Cheer.git
     7a764a6..3aa02a6  main -> main
     ```
+
+- 如果有人在你push之前push过，那么你的push会被拒绝，此时应线从远程版本库（GitHub）拉取更改
+`git pull`
+&nbsp;
+
+    ```none
+    已经是最新的。
+    ```
