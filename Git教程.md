@@ -14,6 +14,9 @@
     处理 delta 中: 100% (1/1), 完成.
     ```
 
+- 进入目录
+`cd Check-Chess-Cheer`
+
 - 查看版本库状态
 `git status`
 &nbsp;
