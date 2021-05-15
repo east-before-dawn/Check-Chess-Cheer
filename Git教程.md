@@ -177,3 +177,27 @@
         Initial commit
     (END)
     ```
+
+- 查看差异
+`git diff`
+&nbsp;
+
+    ```none
+    diff --git "a/Git\346\225\231\347\250\213.md" "b/Git\346\225\231\347\250\213.md"
+    index 90c97b9..e8f754b 100644
+    --- "a/Git\346\225\231\347\250\213.md"
+    +++ "b/Git\346\225\231\347\250\213.md"
+    @@ -177,3 +177,11 @@
+            Initial commit
+        (END)
+        ```
+    +
+    +- 查看差异
+    +`git diff`
+    +&nbsp;
+    +
+    +    ```none
+    +    ;
+    +    ```
+    (END)
+    ```
