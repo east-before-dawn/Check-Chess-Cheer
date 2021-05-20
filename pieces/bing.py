@@ -1,4 +1,3 @@
-
 from NormalPiece import NormalPiece
 
 
@@ -25,6 +24,7 @@ class Bing(NormalPiece):
     """
         判断该逻辑位置(prex,prey)能不能落子
     """
+
     def can_move(self, prex, prey, chessboard):
         x, y = self.x, self.y
         dx, dy = prex - self.x, prey - self.y

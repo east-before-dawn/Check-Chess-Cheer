@@ -1,5 +1,6 @@
 from NormalPiece import NormalPiece
 
+
 class Xiang(NormalPiece):
     def __init__(self, x, y, color):
         NormalPiece.__init__(self, x, y, color)
@@ -7,6 +8,7 @@ class Xiang(NormalPiece):
     """
     找该棋子的图片路径
     """
+
     def get_image_path(self):
         if self.selected == True:
             if self.color == 'red':
@@ -22,6 +24,7 @@ class Xiang(NormalPiece):
     """
     判断该逻辑位置(prex,prey)能不能落子
     """
+
     def can_move(self, prex, prey, chessboard):
         dx, dy = prex-self.x, prey-self.y
         # 越界
@@ -34,7 +37,7 @@ class Xiang(NormalPiece):
         if (self.is_north() and prey > 4) or (self.is_south() and prey < 5):
             return False
         # xiang走田
-        if abs(dx)!=2 or abs(dy)!=2:
+        if abs(dx) != 2 or abs(dy) != 2:
             return False
         # 田中间不能有棋子
         sx, sy = dx / abs(dx), dy / abs(dy)

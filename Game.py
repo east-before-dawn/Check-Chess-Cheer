@@ -6,18 +6,25 @@ import time
 """
 把逻辑坐标转换成物理坐标
 """
+
+
 def real_position(x):
     return x*55 + 30          # 棋盘方格为55X55大小，棋盘外围大约为30
+
 
 """
 把物理坐标转换成逻辑坐标
 """
+
+
 def logic_position(x):
     return round((x-30)/55)        # 四舍五入
 
+
 class Game:
     mode = 0  # 游戏模式，0为 人 vs AI， 1为 AI vs AI， 默认为0
-    def __init__(self, mode = 0, human_color = "red"):
+
+    def __init__(self, mode=0, human_color="red"):
         self.mode = mode
         if mode == 0:
             self.human_color = human_color
@@ -29,16 +36,13 @@ class Game:
         self.chessview.draw_board()             # 绘制棋盘
         self.chessview.showMsg("check-chess-cheer")
 
-
     """
     游戏开始
     """
+
     def start(self):
         self.chessview.showMsg(self.cur_player + "...")
         self.chessview.start()
-
-
-
 
     def click(self, event):
         # 如果cur是None，则表示游戏结束
@@ -71,15 +75,12 @@ class Game:
                     if self.check_end():  # 判断是否结束，判断输赢
                         self.cur_player = None
 
-
                     else:
                         # AI下完，轮到玩家
                         self.cur_player = "human"
                         self.chessview.showMsg("human...")
                         self.chessview.update()
             return
-
-
 
     def check_end(self):                        # 返回是否已结束
         human_win = False
@@ -116,18 +117,12 @@ class Game:
 
     def AI_play(self):
 
-        for (x,y) in self.chessboard.all_pieces:
+        for (x, y) in self.chessboard.all_pieces:
             if self.chessboard.all_pieces[x, y].color == self.AI_color:
-                all_can_move = self.chessboard.all_pieces[x, y].findAll(self.chessboard)
+                all_can_move = self.chessboard.all_pieces[x, y].findAll(
+                    self.chessboard)
                 if not all_can_move:
                     continue
-                self.chessboard.all_pieces[x, y].move(all_can_move[0][0], all_can_move[0][1], self.chessboard)
+                self.chessboard.all_pieces[x, y].move(
+                    all_can_move[0][0], all_can_move[0][1], self.chessboard)
                 return
-
-
-
-
-
-
-
-

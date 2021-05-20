@@ -11,6 +11,7 @@ class Shuai(NormalPiece):
     """
         找该棋子的图片路径
     """
+
     def get_image_path(self):
         if self.selected == True:
             if self.color == 'red':
@@ -26,6 +27,7 @@ class Shuai(NormalPiece):
     """
         判断该逻辑位置(prex,prey)能不能落子
     """
+
     def can_move(self, prex, prey, chessboard):
         x, y = self.x, self.y
         dx, dy = prex - self.x, prey - self.y

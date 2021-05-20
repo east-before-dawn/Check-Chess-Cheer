@@ -6,6 +6,7 @@ from pieces.xiang import *
 from pieces.ma import *
 from pieces.che import *
 
+
 class ChessBoard:
     selected_pieces = None        # 被选中棋子
     all_pieces = dict()          # 棋盘，即棋盘上的棋子及其位置
@@ -61,29 +62,31 @@ class ChessBoard:
     """
     判断有没有这种情况：两王面对面。中间没有任何棋子
     """
+
     def king_ftf(self):
         for (x, y) in self.all_pieces:
-            if self.all_pieces[x, y].is_king :
+            if self.all_pieces[x, y].is_king:
                 sy = 1 if self.all_pieces[x, y].is_north() else -1
                 y += sy
                 while y != 9 and y != 0:
-                    if (x, y) in self.all_pieces :
+                    if (x, y) in self.all_pieces:
                         if self.all_pieces[x, y].is_king:
                             return True
                         else:
                             return False
                     y += sy
 
-
     """
     移出棋子
     """
+
     def delete(self, x, y):
         del self.all_pieces[x, y]
 
     """
     根据用户在棋盘上点击的位置，来决定选子、走棋、吃子等，返回（棋盘是否发生变化，是否已经落子）
     """
+
     def select(self, x, y, player_color):
         print("select", x, y)
         # 点到当前选中的棋子，棋盘无变化
@@ -109,8 +112,3 @@ class ChessBoard:
             self.all_pieces[key].selected = False
         self.selected_pieces = None
         return True, False
-
-
-
-
-

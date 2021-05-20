@@ -1,5 +1,6 @@
 from NormalPiece import NormalPiece
 
+
 class Shi(NormalPiece):
     def __init__(self, x, y, color):
         NormalPiece.__init__(self, x, y, color)
@@ -7,6 +8,7 @@ class Shi(NormalPiece):
     """
     找该棋子的图片路径
     """
+
     def get_image_path(self):
         if self.selected == True:
             if self.color == 'red':
@@ -22,6 +24,7 @@ class Shi(NormalPiece):
     """
     判断该逻辑位置(prex,prey)能不能落子
     """
+
     def can_move(self, prex, prey, chessboard):
         dx, dy = prex-self.x, prey-self.y
         # 越界
@@ -34,7 +37,7 @@ class Shi(NormalPiece):
         # shi只能走米字格的斜边，且只能走一步
         if not (self.is_north() and 3 <= prex <= 5 and 0 <= prey <= 2) and\
                 not (self.is_south() and 3 <= prex <= 5 and 7 <= prey <= 9):
-            print('shi不能超出米字格！',prex,prey)
+            print('shi不能超出米字格！', prex, prey)
             return False
 
         if abs(dx) != 1 or abs(dy) != 1:

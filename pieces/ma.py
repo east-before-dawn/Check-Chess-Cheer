@@ -1,4 +1,3 @@
-
 from NormalPiece import NormalPiece
 
 
@@ -25,6 +24,7 @@ class Ma(NormalPiece):
     """
         判断该逻辑位置(prex,prey)能不能落子
     """
+
     def can_move(self, prex, prey, chessboard):
         x, y = self.x, self.y
         dx, dy = prex - self.x, prey - self.y
@@ -38,11 +38,10 @@ class Ma(NormalPiece):
         if dx == 0 or dy == 0:
             return False
         # 只能走日字
-        if abs(dx) + abs(dy) !=3:
+        if abs(dx) + abs(dy) != 3:
             return False
         # 不能吃蹩马腿
         if (x if abs(dx) == 1 else x+dx/2, y if abs(dy) == 1 else y + (dy/2)) in chessboard.all_pieces:
             return False
 
         return True
-

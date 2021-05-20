@@ -1,5 +1,6 @@
 from NormalPiece import NormalPiece
 
+
 class Pao(NormalPiece):
     def __init__(self, x, y, color):
         NormalPiece.__init__(self, x, y, color)
@@ -7,6 +8,7 @@ class Pao(NormalPiece):
     """
     找该棋子的图片路径
     """
+
     def get_image_path(self):
         if self.selected == True:
             if self.color == 'red':
@@ -22,6 +24,7 @@ class Pao(NormalPiece):
     """
     判断该逻辑位置(prex,prey)能不能落子
     """
+
     def can_move(self, prex, prey, chessboard):
         dx, dy = prex-self.x, prey-self.y
         # 越界
