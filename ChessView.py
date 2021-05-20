@@ -13,7 +13,7 @@ def callback(event):
 
 
 def real_position(x):
-    return x*55 + 30          # 棋盘方格为55X55大小，棋盘外围大约为30
+    return x*53.5 + 31          # 棋盘方格为55X55大小，棋盘外围大约为30
 
 
 """
@@ -22,7 +22,7 @@ def real_position(x):
 
 
 def logic_position(x):
-    return round((x-30)/55)        # 四舍五入
+    return round((x-31)/53.5)        # 四舍五入
 
 
 class ChessView:
