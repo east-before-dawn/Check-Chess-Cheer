@@ -59,22 +59,7 @@ class ChessBoard:
         ChessBoard.all_pieces[0, 9] = Che(0, 9, "black")
         ChessBoard.all_pieces[8, 9] = Che(8, 9, "black")
 
-    """
-    判断有没有这种情况：两王面对面。中间没有任何棋子
-    """
 
-    def king_ftf(self):
-        for (x, y) in self.all_pieces:
-            if self.all_pieces[x, y].is_king:
-                sy = 1 if self.all_pieces[x, y].is_north() else -1
-                y += sy
-                while y != 9 and y != 0:
-                    if (x, y) in self.all_pieces:
-                        if self.all_pieces[x, y].is_king:
-                            return True
-                        else:
-                            return False
-                    y += sy
 
     """
     移出棋子

@@ -27,7 +27,7 @@ def logic_position(x):
 
 class ChessView:
     piece_images = dict()           # 保存棋盘所有棋子的PhotoImage对象
-    # can_move_img = []           # 有多少个可选位置就要有多少个PhotoImage对象，不然引用会被覆盖
+    can_move_img = []           # 有多少个可选位置就要有多少个PhotoImage对象，不然引用会被覆盖
 
     # 绘制棋盘盘面board
     root = tkinter.Tk()
@@ -65,7 +65,7 @@ class ChessView:
                 # self.can.create_image(real_position(x), real_position(y), image=tkinter.PhotoImage(file="images/OOS.gif"))
 
     def __init__(self, game, chessboard):
-        self.game = game  # !!control是chessgame的对象
+        self.game = game
         if self.game.mode == 0:
             self.can.bind('<Button-1>', self.game.click)
         self.chessboard = chessboard

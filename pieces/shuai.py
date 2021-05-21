@@ -44,7 +44,15 @@ class Shuai(NormalPiece):
         if not (self.is_north() and 3 <= prex <= 5 and 0 <= prey <= 2) and not (
                 self.is_south() and 3 <= prex <= 5 and 7 <= prey <= 9):
             return False
-        """
-        将和帅是不能在同一条直线上直接对面的，两者中间必须有棋子隔着，不然后手走的那一方就输了。
-        """
+        # 将和帅是不能在同一条直线上直接对面的，两者中间必须有棋子隔着
+
+        sy = 1 if self.is_north() else -1
+        y += sy
+        while y != 9 and y != 0:
+            if (x, y) in chessboard.all_pieces:
+                if chessboard.all_pieces[x, y].is_king:
+                    return False
+            y += sy
+
+
         return True
