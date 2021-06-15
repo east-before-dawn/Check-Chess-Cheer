@@ -86,18 +86,12 @@ class Game:
         human_win = False
         AI_win = False
         pieces = self.chessboard.all_pieces
-        if self.chessboard.king_ftf():        # 两王面对面时，结束？？？？是吗
-            if self.cur_player == "human":
-                human_win = True
-            else:
-                AI_win = True
-        else:
-            for (x, y) in pieces.keys():
-                if pieces[x, y].is_king:
-                    if pieces[x, y].color == self.human_color:
-                        human_win = True
-                    else:
-                        AI_win = True
+        for (x, y) in pieces.keys():
+            if pieces[x, y].is_king:
+                if pieces[x, y].color == self.human_color:
+                    human_win = True
+                else:
+                    AI_win = True
 
         if not human_win:
             self.chessview.showMsg("check-chess-cheer")
