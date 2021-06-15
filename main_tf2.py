@@ -4,6 +4,7 @@ import asyncio
 from asyncio.queues import Queue
 import uvloop
 asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
+
 import tensorflow as tf
 import numpy as np
 import os
@@ -13,8 +14,8 @@ import time
 import argparse
 from collections import deque, defaultdict, namedtuple
 import copy
-from policy_value_network import *
-from policy_value_network_gpus import *
+from policy_value_network_tf2 import *
+from policy_value_network_gpus_tf2 import *
 import scipy.stats
 from threading import Lock
 from concurrent.futures import ThreadPoolExecutor
@@ -173,7 +174,8 @@ class leaf_node(object):
     #@profile
     def expand(self, moves, action_probs):
         tot_p = 1e-8
-        action_probs = action_probs.flatten()   #.squeeze()
+        # print("action_probs : ", action_probs)
+        action_probs = tf.squeeze(action_probs)  #.flatten()   #.squeeze()
         # print("expand action_probs shape : ", action_probs.shape)
         for action in moves:
             in_state = GameBoard.sim_do_action(action, self.state)
@@ -1137,8 +1139,9 @@ class cchess_main(object):
         self.buffer_size = 10000
         self.data_buffer = deque(maxlen=self.buffer_size)
         self.game_borad = GameBoard()
+        self.processor = processor
         # self.current_player = 'w'    #“w”表示红方，“b”表示黑方。
-        self.policy_value_netowrk = policy_value_network(res_block_nums) if processor == 'cpu' else policy_value_network_gpus(num_gpus, res_block_nums)
+        self.policy_value_netowrk = policy_value_network(self.lr_callback, res_block_nums) if processor == 'cpu' else policy_value_network_gpus(num_gpus, res_block_nums)
         self.search_threads = in_search_threads
         self.mcts = MCTS_tree(self.game_borad.state, self.policy_value_netowrk.forward, self.search_threads)
         self.exploration = exploration
@@ -1150,8 +1153,11 @@ class cchess_main(object):
 
     @staticmethod
     def flip_policy(prob):
-        prob = prob.flatten()
+        prob = tf.squeeze(prob) # .flatten()
         return np.asarray([prob[ind] for ind in unflipped_index])
+
+    def lr_callback(self):
+        return self.learning_rate * self.lr_multiplier
 
     def policy_update(self):
         """update the policy-value net"""
@@ -1160,19 +1166,33 @@ class cchess_main(object):
         state_batch = [data[0] for data in mini_batch]
         mcts_probs_batch = [data[1] for data in mini_batch]
         winner_batch = [data[2] for data in mini_batch]
-        # print(np.array(winner_batch).shape)
-        # print(winner_batch)
+
         winner_batch = np.expand_dims(winner_batch, 1)
-        # print(winner_batch.shape)
-        # print(winner_batch)
+
         start_time = time.time()
         old_probs, old_v = self.mcts.forward(state_batch)
         for i in range(self.epochs):
-            accuracy, loss, self.global_step = self.policy_value_netowrk.train_step(state_batch, mcts_probs_batch, winner_batch,
-                                                             self.learning_rate * self.lr_multiplier)    #
+            # print("tf.executing_eagerly() : ", tf.executing_eagerly())
+            state_batch = np.array(state_batch)
+            if len(state_batch.shape) == 3:
+                sp = state_batch.shape
+                state_batch = np.reshape(state_batch, [1, sp[0], sp[1], sp[2]])
+            if self.processor == 'cpu':
+                accuracy, loss, self.global_step = self.policy_value_netowrk.train_step(state_batch, mcts_probs_batch, winner_batch,
+                                                                 self.learning_rate * self.lr_multiplier)    #
+            else:
+                # import pickle
+                # pickle.dump((state_batch, mcts_probs_batch, winner_batch, self.learning_rate * self.lr_multiplier), open('preprocess.p', 'wb'))
+                with self.policy_value_netowrk.strategy.scope():
+                    train_dataset = tf.data.Dataset.from_tensor_slices((state_batch, mcts_probs_batch, winner_batch)).batch(len(winner_batch))  # , self.learning_rate * self.lr_multiplier
+                        # .shuffle(BUFFER_SIZE).batch(BATCH_SIZE)
+                    train_iterator = self.policy_value_netowrk.strategy.make_dataset_iterator(train_dataset)
+                    train_iterator.initialize()
+                    accuracy, loss, self.global_step = self.policy_value_netowrk.distributed_train(train_iterator)
+
             new_probs, new_v = self.mcts.forward(state_batch)
             kl_tmp = old_probs * (np.log((old_probs + 1e-10) / (new_probs + 1e-10)))
-            # print("kl_tmp.shape", kl_tmp.shape)
+
             kl_lst = []
             for line in kl_tmp:
                 # print("line.shape", line.shape)
@@ -1193,8 +1213,8 @@ class cchess_main(object):
         elif kl < self.kl_targ / 2 and self.lr_multiplier < 10:
             self.lr_multiplier *= 1.5
 
-        explained_var_old = 1 - np.var(np.array(winner_batch) - old_v.flatten()) / np.var(np.array(winner_batch))
-        explained_var_new = 1 - np.var(np.array(winner_batch) - new_v.flatten()) / np.var(np.array(winner_batch))
+        explained_var_old = 1 - np.var(np.array(winner_batch) - tf.squeeze(old_v)) / np.var(np.array(winner_batch)) # .flatten()
+        explained_var_new = 1 - np.var(np.array(winner_batch) - tf.squeeze(new_v)) / np.var(np.array(winner_batch)) # .flatten()
         print(
             "kl:{:.5f},lr_multiplier:{:.3f},loss:{},accuracy:{},explained_var_old:{:.3f},explained_var_new:{:.3f}".format(
                 kl, self.lr_multiplier, loss, accuracy, explained_var_old, explained_var_new))
@@ -1306,7 +1326,7 @@ class cchess_main(object):
             moves = GameBoard.get_legal_moves(self.game_borad.state, self.game_borad.current_player)
 
             tot_p = 1e-8
-            action_probs = action_probs.flatten()  # .squeeze()
+            action_probs = tf.squeeze(action_probs)  # .flatten()  # .squeeze()
             act_prob_dict = defaultdict(float)
             # print("expand action_probs shape : ", action_probs.shape)
             for action in moves:
@@ -1443,7 +1463,7 @@ class cchess_main(object):
             moves = GameBoard.get_legal_moves(self.game_borad.state, self.game_borad.current_player)
 
             tot_p = 1e-8
-            action_probs = action_probs.flatten()  # .squeeze()
+            action_probs = tf.squeeze(action_probs)  # .flatten()  # .squeeze()
             act_prob_dict = defaultdict(float)
             # print("expand action_probs shape : ", action_probs.shape)
             for action in moves:
@@ -1577,7 +1597,7 @@ if __name__ == '__main__':
         train_main = cchess_main(args.train_playout, args.batch_size, True, args.search_threads, args.processor, args.num_gpus, args.res_block_nums, args.human_color)    # * args.num_gpus
         train_main.run()
     elif args.mode == 'play':
-        from ChessGame import *
+        from ChessGame_tf2 import *
         game = ChessGame(args.ai_count, args.ai_function, args.play_playout, args.delay, args.end_delay, args.batch_size,
                          args.search_threads, args.processor, args.num_gpus, args.res_block_nums, args.human_color)    # * args.num_gpus
         game.start()

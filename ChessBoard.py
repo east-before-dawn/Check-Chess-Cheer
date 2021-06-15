@@ -1,114 +1,115 @@
-from pieces.bing import *
-from pieces.shuai import *
-from pieces.pao import *
-from pieces.shi import *
-from pieces.xiang import *
-from pieces.ma import *
-from pieces.che import *
+#coding:utf-8
+from chessman.Bing import *
+from chessman.Shuai import *
+from chessman.Pao import *
+from chessman.Shi import *
+from chessman.Xiang import *
+from chessman.Ma import *
+from chessman.Che import *
 
 
 class ChessBoard:
-    selected_pieces = None        # 被选中棋子
-    all_pieces = dict()          # 棋盘，即棋盘上的棋子及其位置
+    pieces = dict()
 
-    def __init__(self):
-        ChessBoard.all_pieces[4, 0] = Shuai(4, 0, "red")
 
-        ChessBoard.all_pieces[0, 3] = Bing(0, 3, "red")
-        ChessBoard.all_pieces[2, 3] = Bing(2, 3, "red")
-        ChessBoard.all_pieces[4, 3] = Bing(4, 3, "red")
-        ChessBoard.all_pieces[6, 3] = Bing(6, 3, "red")
-        ChessBoard.all_pieces[8, 3] = Bing(8, 3, "red")
+    selected_piece = None
 
-        ChessBoard.all_pieces[1, 2] = Pao(1, 2, "red")
-        ChessBoard.all_pieces[7, 2] = Pao(7, 2, "red")
+    def __init__(self, north_is_red = True):
+        # self.north_is_red = north_is_red
+        # north area
+        ChessBoard.pieces[4, 0] = Shuai(4, 0, north_is_red, "north")
 
-        ChessBoard.all_pieces[3, 0] = Shi(3, 0, "red")
-        ChessBoard.all_pieces[5, 0] = Shi(5, 0, "red")
+        ChessBoard.pieces[0, 3] = Bing(0, 3, north_is_red, "north")
+        ChessBoard.pieces[2, 3] = Bing(2, 3, north_is_red, "north")
+        ChessBoard.pieces[4, 3] = Bing(4, 3, north_is_red, "north")
+        ChessBoard.pieces[6, 3] = Bing(6, 3, north_is_red, "north")
+        ChessBoard.pieces[8, 3] = Bing(8, 3, north_is_red, "north")
 
-        ChessBoard.all_pieces[2, 0] = Xiang(2, 0, "red")
-        ChessBoard.all_pieces[6, 0] = Xiang(6, 0, "red")
+        ChessBoard.pieces[1, 2] = Pao(1, 2, north_is_red, "north")
+        ChessBoard.pieces[7, 2] = Pao(7, 2, north_is_red, "north")
 
-        ChessBoard.all_pieces[1, 0] = Ma(1, 0, "red")
-        ChessBoard.all_pieces[7, 0] = Ma(7, 0, "red")
+        ChessBoard.pieces[3, 0] = Shi(3, 0, north_is_red, "north")
+        ChessBoard.pieces[5, 0] = Shi(5, 0, north_is_red, "north")
 
-        ChessBoard.all_pieces[0, 0] = Che(0, 0, "red")
-        ChessBoard.all_pieces[8, 0] = Che(8, 0, "red")
+        ChessBoard.pieces[2, 0] = Xiang(2, 0, north_is_red, "north")
+        ChessBoard.pieces[6, 0] = Xiang(6, 0, north_is_red, "north")
+
+        ChessBoard.pieces[1, 0] = Ma(1, 0, north_is_red, "north")
+        ChessBoard.pieces[7, 0] = Ma(7, 0, north_is_red, "north")
+
+        ChessBoard.pieces[0, 0] = Che(0, 0, north_is_red, "north")
+        ChessBoard.pieces[8, 0] = Che(8, 0, north_is_red, "north")
 
         # south area
-        ChessBoard.all_pieces[4, 9] = Shuai(4, 9, "black")
+        ChessBoard.pieces[4, 9] = Shuai(4, 9, not north_is_red, "south")
 
-        ChessBoard.all_pieces[0, 6] = Bing(0, 6, "black")
-        ChessBoard.all_pieces[2, 6] = Bing(2, 6, "black")
-        ChessBoard.all_pieces[4, 6] = Bing(4, 6, "black")
-        ChessBoard.all_pieces[6, 6] = Bing(6, 6, "black")
-        ChessBoard.all_pieces[8, 6] = Bing(8, 6, "black")
+        ChessBoard.pieces[0, 6] = Bing(0, 6, not north_is_red, "south")
+        ChessBoard.pieces[2, 6] = Bing(2, 6, not north_is_red, "south")
+        ChessBoard.pieces[4, 6] = Bing(4, 6, not north_is_red, "south")
+        ChessBoard.pieces[6, 6] = Bing(6, 6, not north_is_red, "south")
+        ChessBoard.pieces[8, 6] = Bing(8, 6, not north_is_red, "south")
 
-        ChessBoard.all_pieces[1, 7] = Pao(1, 7, "black")
-        ChessBoard.all_pieces[7, 7] = Pao(7, 7, "black")
+        ChessBoard.pieces[1, 7] = Pao(1, 7, not north_is_red, "south")
+        ChessBoard.pieces[7, 7] = Pao(7, 7, not north_is_red, "south")
 
-        ChessBoard.all_pieces[3, 9] = Shi(3, 9, "black")
-        ChessBoard.all_pieces[5, 9] = Shi(5, 9, "black")
+        ChessBoard.pieces[3, 9] = Shi(3, 9, not north_is_red, "south")
+        ChessBoard.pieces[5, 9] = Shi(5, 9, not north_is_red, "south")
 
-        ChessBoard.all_pieces[2, 9] = Xiang(2, 9, "black")
-        ChessBoard.all_pieces[6, 9] = Xiang(6, 9, "black")
+        ChessBoard.pieces[2, 9] = Xiang(2, 9, not north_is_red, "south")
+        ChessBoard.pieces[6, 9] = Xiang(6, 9, not north_is_red, "south")
 
-        ChessBoard.all_pieces[1, 9] = Ma(1, 9, "black")
-        ChessBoard.all_pieces[7, 9] = Ma(7, 9, "black")
+        ChessBoard.pieces[1, 9] = Ma(1, 9, not north_is_red, "south")
+        ChessBoard.pieces[7, 9] = Ma(7, 9, not north_is_red, "south")
 
-        ChessBoard.all_pieces[0, 9] = Che(0, 9, "black")
-        ChessBoard.all_pieces[8, 9] = Che(8, 9, "black")
+        ChessBoard.pieces[0, 9] = Che(0, 9, not north_is_red, "south")
+        ChessBoard.pieces[8, 9] = Che(8, 9, not north_is_red, "south")
 
-    """
-    判断有没有这种情况：两王面对面。中间没有任何棋子
-    """
+    def can_move(self, x, y, dx, dy):
+        return self.pieces[x, y].can_move(self, dx, dy)
 
-    def king_ftf(self):
-        for (x, y) in self.all_pieces:
-            if self.all_pieces[x, y].is_king:
-                sy = 1 if self.all_pieces[x, y].is_north() else -1
-                y += sy
-                while y != 9 and y != 0:
-                    if (x, y) in self.all_pieces:
-                        if self.all_pieces[x, y].is_king:
-                            return True
-                        else:
-                            return False
-                    y += sy
+    def move(self, x, y, dx, dy):
+        return self.pieces[x, y].move(self, dx, dy)
 
-    """
-    移出棋子
-    """
+    def remove(self, x, y):
+        del self.pieces[x, y]
 
-    def delete(self, x, y):
-        del self.all_pieces[x, y]
+    def select(self, x, y, player_is_red):
+        # 选中棋子
+        if not self.selected_piece:
+            if (x, y) in self.pieces and self.pieces[x, y].is_red == player_is_red:
+                self.pieces[x, y].selected = True
+                self.selected_piece = self.pieces[x, y]
+            return False, None
 
-    """
-    根据用户在棋盘上点击的位置，来决定选子、走棋、吃子等，返回（棋盘是否发生变化，是否已经落子）
-    """
+        # 移动棋子
+        if not (x, y) in self.pieces:
+            if self.selected_piece:
+                ox, oy = self.selected_piece.x, self.selected_piece.y
+                if self.can_move(ox, oy, x-ox, y-oy):
+                    self.move(ox, oy, x-ox, y-oy)
+                    self.pieces[x,y].selected = False
+                    self.selected_piece = None
+                    return True, (ox, oy, x, y)
+            return False, None
 
-    def select(self, x, y, player_color):
-        print("select", x, y)
-        # 点到当前选中的棋子，棋盘无变化
-        if (x, y) in self.all_pieces and self.all_pieces[x, y].selected:
-            return False, False
-        # 点到己方棋子，选中棋子，棋盘发生变化
-        if (x, y) in self.all_pieces and self.all_pieces[x, y].color == player_color:
-            if self.selected_pieces:
-                self.selected_pieces.selected = False           # 取消当前选中棋子的选中
-            self.all_pieces[x, y].selected = True
-            self.selected_pieces = self.all_pieces[x, y]
-            return True, False
-        # 点到可落子的位置
-        if self.selected_pieces:
-            if self.selected_pieces.can_move(x, y, self):
-                self.selected_pieces.move(x, y, self)
-                self.selected_pieces.selected = False
-                self.selected_pieces = None
-                return True, True
-            return False, False
-        # 点到其他位置，取消选中
-        for key in self.all_pieces.keys():
-            self.all_pieces[key].selected = False
-        self.selected_pieces = None
-        return True, False
+        # 同一个棋子
+        if self.pieces[x, y].selected:
+            return False, None
+
+        # 吃子
+        if self.pieces[x, y].is_red != player_is_red:
+            ox, oy = self.selected_piece.x, self.selected_piece.y
+            if self.can_move(ox, oy, x-ox, y-oy):
+                self.move(ox, oy, x-ox, y-oy)
+                self.pieces[x,y].selected = False
+                self.selected_piece = None
+                return True, (ox, oy, x, y)
+            return False, None
+
+        # 取消选中
+        for key in self.pieces.keys():
+            self.pieces[key].selected = False
+        # 选择棋子
+        self.pieces[x, y].selected = True
+        self.selected_piece = self.pieces[x,y]
+        return False, None
